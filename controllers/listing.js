@@ -1,5 +1,6 @@
 const Listing = require("../models/listing");
 const mapToken = process.env.MAP_TOKEN;
+const axios = require("axios");
 
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({});
@@ -23,17 +24,35 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-  let url = req.file.path;
-  let filename = req.file.filename;
-  const checkPrint = {
-    body: req.body.listing,
-    url,
-    filename,
-  };
-  const newListing = new Listing(req.body.listing);
-  newListing.owner = req.user._id;
-  newListing.image = { url, filename };
-  checkPrint.newListing = newListing;
+  const { listing } = req.body;
+  const { location } = listing;
+
+  // Get lat/lng from LocationIQ
+  const locationIQToken = process.env.MAP_TOKEN;
+  const response = await axios.get("https://us1.locationiq.com/v1/search", {
+    params: {
+      key: locationIQToken,
+      q: location,
+      format: "json",
+    },
+  });
+
+  const geoData = response.data[0];
+  const latitude = parseFloat(geoData.lat);
+  const longitude = parseFloat(geoData.lon);
+
+  // Image file
+  const url = req.file?.path || "";
+  const filename = req.file?.filename || "";
+
+  // Create and assign
+  const newListing = new Listing({
+    ...listing,
+    coordinates: [longitude, latitude],
+    image: { url, filename },
+    owner: req.user._id,
+  });
+
   await newListing.save();
   req.flash("success", "New Listing Created!");
   res.redirect("/listings");
