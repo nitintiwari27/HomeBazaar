@@ -16,6 +16,7 @@ module.exports.showListing = async (req, res) => {
   const listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
     .populate("owner");
+  console.log("Line 19 show", listing);
   if (!listing) {
     req.flash("error", "Sorry, the listing you're looking for doesn't exist.");
     return res.redirect("/listings");

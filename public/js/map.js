@@ -1,17 +1,46 @@
 const accessToken = mapToken;
-var styleJson =
-  "https://tiles.locationiq.com/v3/streets/vector.json?key=" + mapToken;
+const coords = coordinates;
+const parsedCoords = typeof coords === "string" ? JSON.parse(coords) : coords;
+console.log(parsedCoords);
+
+const styleJson =
+  "https://tiles.locationiq.com/v3/streets/vector.json?key=" + accessToken;
+
 const map = new ol.Map({
   target: "map",
   view: new ol.View({
-    center: ol.proj.fromLonLat([77.209, 28.6139]), // Longitude, Latitude for New Delhi
+    center: ol.proj.fromLonLat(parsedCoords),
     zoom: 13,
   }),
 });
 
-olms.apply(map, styleJson);
+olms.apply(map, styleJson).then(() => {
+  if (parsedCoords && parsedCoords.length === 2) {
+    const marker = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.fromLonLat(parsedCoords)),
+      name: "User Marker",
+    });
 
-// new maplibregl.Marker({ color: "red" })
-//   .setLngLat(coordinates)
-//   .setPopup(new maplibregl.Popup().setHTML("<b>New Delhi</b>"))
-//   .addTo(map);
+    marker.setStyle(
+      new ol.style.Style({
+        image: new ol.style.Icon({
+          scale: 0.5,
+          src: "https://tiles.locationiq.com/static/images/marker.png",
+        }),
+      })
+    );
+
+    const vectorSource = new ol.source.Vector({
+      features: [marker],
+    });
+
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+      zIndex: 1,
+    });
+
+    map.addLayer(vectorLayer);
+  } else {
+    console.error("Invalid coordinates passed to map.js:", parsedCoords);
+  }
+});
