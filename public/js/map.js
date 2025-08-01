@@ -11,7 +11,7 @@ const map = new ol.Map({
 
 olms.apply(map, styleJson);
 
-new maplibregl.Marker({ color: "red" })
-  .setLngLat(coordinates)
-  .setPopup(new maplibregl.Popup().setHTML("<b>New Delhi</b>"))
-  .addTo(map);
+// new maplibregl.Marker({ color: "red" })
+//   .setLngLat(coordinates)
+//   .setPopup(new maplibregl.Popup().setHTML("<b>New Delhi</b>"))
+//   .addTo(map);
