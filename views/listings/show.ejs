@@ -88,21 +88,24 @@
                     <div class="row">
                         <p><b>All Reviews</b></p>
                         <% for(review of listing.reviews) { %>
-                            <div class="card col-5 ms-3 mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        @<%= review.author.username %>
-                                    </h5>
-                                    <p class="starability-result card-text" data-rating="<%= review.rating %>">
-                                    </p>
-                                    <p class="card-text">
-                                        <%= review.comment %>
-                                    </p>
+                            <div class="col-md-5 ms-3 mb-4">
+                                <div class="card h-100 shadow-sm p-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@<%= review.author.username %>
+                                        </h5>
+                                        <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+                                        <p class="card-text">
+                                            <%= review.comment %>
+                                        </p>
 
-                                    <form class="mb-1" method="post"
-                                        action="/listings/<%= listing._id %>/reviews/<%= review._id%>?_method=DELETE">
-                                        <button class="btn btn-sm btn-dark">Delete</button>
-                                    </form>
+                                        <% if(currUser && review.author &&
+                                            review.author._id.toString()===currUser._id.toString()) { %>
+                                            <form class="mt-2" method="post"
+                                                action="/listings/<%= listing._id %>/reviews/<%= review._id%>?_method=DELETE">
+                                                <button class="btn btn-sm btn-dark">Delete</button>
+                                            </form>
+                                            <% } %>
+                                    </div>
                                 </div>
                             </div>
                             <% } %>
