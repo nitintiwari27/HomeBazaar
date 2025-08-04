@@ -8,6 +8,36 @@ const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
 
+//  SEARCH ROUTE (Place BEFORE :id route)
+router.get(
+  "/search",
+  wrapAsync(async (req, res) => {
+    const { q } = req.query;
+    if (!q) {
+      req.flash("error", "Please enter a search query.");
+      return res.redirect("/listings");
+    }
+
+    const searchQuery = new RegExp(q, "i");
+
+    const allListings = await Listing.find({
+      $or: [
+        { title: { $regex: searchQuery } },
+        { location: { $regex: searchQuery } },
+        { country: { $regex: searchQuery } },
+      ],
+    });
+
+    if (allListings.length === 0) {
+      req.flash("error", "No listings found matching your search.");
+      return res.redirect("/listings");
+    }
+
+    res.render("listings/index", { allListings, searchTerm: q });
+  })
+);
+
+// LISTINGS INDEX + CREATE
 router
   .route("/")
   .get(wrapAsync(listingController.index))
@@ -18,9 +48,10 @@ router
     wrapAsync(listingController.createListing)
   );
 
-//New Route
+//  NEW LISTING FORM
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
+//  SHOW / UPDATE / DELETE (DYNAMIC ROUTE – must be after /search)
 router
   .route("/:id")
   .get(wrapAsync(listingController.showListing))
@@ -33,7 +64,7 @@ router
   )
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
-//Edit Route
+//  EDIT FORM
 router.get(
   "/:id/edit",
   isLoggedIn,

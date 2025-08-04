@@ -49,7 +49,7 @@
     <!-- Review Form -->
 
 
-    <div class="col-8 offset-3 mb-3">
+    <div class="col-8 offset-3 mb-3 mt-3">
 
         <% if(currUser) {%>
             <hr>
@@ -85,10 +85,10 @@
             <% } %>
 
                 <% if(listing.reviews.length>0){ %>
-                    <div class="row">
+                    <div class="row ">
                         <p><b>All Reviews</b></p>
                         <% for(review of listing.reviews) { %>
-                            <div class="col-md-5 ms-3 mb-4">
+                            <div class="col-md-5 ms-3 mb-4 review-card">
                                 <div class="card h-100 shadow-sm p-3">
                                     <div class="card-body">
                                         <h5 class="card-title">@<%= review.author.username %>
@@ -112,7 +112,7 @@
                     </div>
                     <% } %>
     </div>
-    <div class="col-8 offset-3 mb-3">
+    <div class="col-8 offset-3 mb-3 map">
         <h3>Where you'll be</h3>
         <div id="map"></div>
     </div>

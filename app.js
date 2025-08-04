@@ -71,14 +71,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get("/demouser", async (req, res) => {
-//   let fakeUser = new User({
-//     email: "student@gmail.com",
-//     username: "Nitin_Tiwari",
-//   });
-//   let registeredUser = await User.register(fakeUser, "nitintiwari");
-//   res.send(registeredUser);
-// });
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
@@ -94,6 +89,6 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
 });
 
-app.listen(4001, () => {
+app.listen(4001, "0.0.0.0", () => {
   console.log("server is listening to port 4001");
 });
