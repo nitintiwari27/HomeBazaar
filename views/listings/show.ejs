@@ -2,6 +2,7 @@
     <script>
         const mapToken = "<%= process.env.MAP_TOKEN %>";
         const coordinates = "<%- listing.coordinates ? JSON.stringify(listing.coordinates): 'null' %>";
+        const contactNumber = "<%= listing.owner.phone %>";
     </script>
 
 
@@ -18,6 +19,9 @@
             <div class="card-body">
                 <p class="card-text">Owned By: <i><b>
                             <%= listing.owner.username %>
+                        </b></i></p>
+                <p class="card-text">Contact : <i><b>
+                            <%= listing.owner.phone %>
                         </b></i></p>
                 <p class="card-text">
                     <%=listing.description %>

@@ -1,7 +1,6 @@
 const accessToken = mapToken;
 const coords = coordinates;
 const parsedCoords = typeof coords === "string" ? JSON.parse(coords) : coords;
-console.log(parsedCoords);
 
 const styleJson =
   "https://tiles.locationiq.com/v3/streets/vector.json?key=" + accessToken;
@@ -16,11 +15,11 @@ const map = new ol.Map({
 
 olms.apply(map, styleJson).then(() => {
   if (parsedCoords && parsedCoords.length === 2) {
-    // 🧭 Create your marker
+    //  Create marker
     const marker = new ol.Feature({
       geometry: new ol.geom.Point(ol.proj.fromLonLat(parsedCoords)),
-      name: "Exact Location will be Provided after Booking",
-      id: "my-location", // 🔑 Unique ID to identify your marker
+      name: `For Exact Location Contact: <strong>${contactNumber}</strong>`,
+      id: "my-location",
     });
 
     marker.setStyle(
@@ -43,7 +42,7 @@ olms.apply(map, styleJson).then(() => {
 
     map.addLayer(vectorLayer);
 
-    // 💬 Create the popup element
+    //  Popup DOM
     const popupEl = document.createElement("div");
     popupEl.className = "popup";
     popupEl.style.cssText = `
@@ -51,6 +50,8 @@ olms.apply(map, styleJson).then(() => {
       border: 1px solid #888;
       padding: 8px 12px;
       border-radius: 6px;
+      display: none;
+      font-weight: 500;
     `;
     document.body.appendChild(popupEl);
 
@@ -59,21 +60,44 @@ olms.apply(map, styleJson).then(() => {
       positioning: "bottom-center",
       offset: [0, -20],
     });
+
     map.addOverlay(popupOverlay);
 
-    // 🖱️ Show popup only if clicked on your marker
-    map.on("singleclick", function (e) {
-      const feature = map.forEachFeatureAtPixel(e.pixel, function (feat) {
-        return feat;
-      });
+    //  Track popup toggle state
+    let popupVisible = false;
 
-      // ✅ Show popup only for your marker
+    //  Hover: show popup temporarily
+    map.on("pointermove", (e) => {
+      if (popupVisible) return; // Don't show on hover if already toggled on
+
+      const feature = map.forEachFeatureAtPixel(e.pixel, (feat) => feat);
+
       if (feature && feature.get("id") === "my-location") {
         popupOverlay.setPosition(e.coordinate);
         popupEl.innerHTML = feature.get("name");
         popupEl.style.display = "block";
       } else {
-        popupEl.style.display = "none"; // ❌ Hide if clicked elsewhere
+        popupEl.style.display = "none";
+      }
+    });
+
+    //  Click: toggle popup on marker, hide elsewhere
+    map.on("singleclick", (e) => {
+      const feature = map.forEachFeatureAtPixel(e.pixel, (feat) => feat);
+
+      if (feature && feature.get("id") === "my-location") {
+        if (popupVisible) {
+          popupEl.style.display = "none";
+          popupVisible = false;
+        } else {
+          popupOverlay.setPosition(e.coordinate);
+          popupEl.innerHTML = feature.get("name");
+          popupEl.style.display = "block";
+          popupVisible = true;
+        }
+      } else {
+        popupEl.style.display = "none";
+        popupVisible = false;
       }
     });
   } else {
