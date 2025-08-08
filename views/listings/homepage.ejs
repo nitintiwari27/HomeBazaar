@@ -1,0 +1,57 @@
+<% layout("/layouts/boilerplate") %>
+
+    <section class="hero-section text-center py-5">
+        <div class="container">
+            <h1 class="fw-bold display-5">Sell or Buy Property Easily</h1>
+            <p class="text-muted mb-4">Everything you need to buy or sell property, all in one place.</p>
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8">
+                    <form class="d-flex" action="/listings/search" method="GET">
+                        <input class="form-control form-control-lg me-2" type="search"
+                            placeholder="Search by city, locality, builder, project..." aria-label="Search" name="q"
+                            style="font-size: 1.3rem; border-radius: 2rem; height: 3.5rem;">
+                        <button class="btn search-btn" type="submit"><i
+                                class="fa-solid fa-magnifying-glass"></i>Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-auto">
+                    <a href="/listings/new" class="btn btn-outline-dark me-2">Post Your Property</a>
+                    <a href="/listings" class="btn btn-outline-dark">Browse Listings</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="container my-5">
+        <h2 class="mb-4 text-center">Featured Listings</h2>
+        <div class="row g-4 justify-content-center">
+            <% listings.forEach(listing=> { %>
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="card shadow-sm listing-card h-100">
+                        <img src="<%= listing.image?.url || '/images/default.jpg' %>" class="card-img-top show-img"
+                            alt="Property Image" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold ">
+                                <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+                                    <%= listing.title %>
+                                </a>
+                            </h5>
+                            <p class="card-text fw-bold text-primary ">
+                                ₹ <%= listing.price.toLocaleString("en-IN") %> / night
+                            </p>
+                            <p class="card-text text-muted">
+                                <%= listing.location %>, <%= listing.country %>
+                            </p>
+                            <a href="/listings/<%= listing._id %>" class="btn btn-dark mt-2 mb-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+        <div class="text-center mt-3">
+            <a href="/listings" class="btn btn-outline-dark">See All Listings</a>
+        </div>
+    </section>

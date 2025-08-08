@@ -3,6 +3,7 @@ if (process.env.NODE_ENV != "production") {
 }
 const express = require("express");
 const app = express();
+app.use(express.json());
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
@@ -14,6 +15,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const orderRoutes = require("./routes/order.js");
+const Listing = require("./models/listing.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -90,13 +93,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.redirect("/listings");
+app.get("/", async (req, res) => {
+  const listings = await Listing.find().limit(8);
+  res.render("listings/homepage", { listings });
 });
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
+app.use("/orders", orderRoutes);
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
@@ -105,9 +110,8 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong!" } = err;
   res.render("error.ejs", { message });
-  // res.status(statusCode).send(message);
 });
 
 app.listen(4001, "0.0.0.0", () => {
-  console.log("server is listening to port 4001");
+  console.log("server is listening to port http://localhost:4001");
 });
