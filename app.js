@@ -94,7 +94,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", async (req, res) => {
-  const listings = await Listing.find().limit(8);
+  const listings = await Listing.find().limit(3);
   res.render("listings/homepage", { listings });
 });
 

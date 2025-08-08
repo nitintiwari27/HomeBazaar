@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/listings">
+        <a class="navbar-brand" href="/">
             <h1>HomeBazaar</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
@@ -10,17 +10,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-
-            <!-- <div class="navbar-nav ms-auto ">
-                <form class="d-flex" action="/listings/search" method="GET"> <input class="form-control me-2 search-inp"
-                        type="search" placeholder="Search Destination" aria-label="Search" name="q"> <button
-                        class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-                </form>
-            </div> -->
-
             <div class="navbar-nav ms-auto">
                 <div class="navbar-nav">
+                    <a class="nav-link" href="/">Home</a>
                     <a class="nav-link" href="/listings">Explore</a>
+
                 </div>
                 <a class="nav-link" href="/listings/new">Sell your home</a>
                 <% if(!currUser){ %>
