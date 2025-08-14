@@ -120,6 +120,10 @@ body {
   padding-right: 0;
 }
 
+#togglePassword {
+  cursor: pointer;
+}
+
 /* Map Styling */
 #map {
   height: 400px;

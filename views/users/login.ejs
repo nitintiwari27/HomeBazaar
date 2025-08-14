@@ -9,9 +9,30 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" class="form-control" required />
+                    <!-- <input name="password" id="password" type="password" class="form-control" required /> -->
+                    <div class="input-group">
+                        <input name="password" id="password" type="password" class="form-control" required />
+                        <span class="input-group-text" id="togglePassword" style="cursor:pointer;">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    </div>
                 </div>
                 <button class="btn btn-success">Login</button>
             </form>
         </div>
     </div>
+
+    <script>
+        const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#password");
+        const icon = togglePassword.querySelector("i");
+
+        togglePassword.addEventListener("click", function () {
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+
+            // Eye icon toggle
+            icon.classList.toggle("bi-eye");
+            icon.classList.toggle("bi-eye-slash");
+        });
+    </script>

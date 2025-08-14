@@ -4,7 +4,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new Schema({
   email: {
-    type: String, // ✅ Capital 'S', not from Joi
+    type: String,
     required: true,
   },
   phone: {

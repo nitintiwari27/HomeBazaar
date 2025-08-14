@@ -34,14 +34,12 @@ module.exports.createOrder = async (req, res) => {
 
     const order = await newOrder.save();
 
-    // req.flash("success", "Order created successfully");
     return res.status(200).json({
       success: true,
       message: "Order created successfully",
       order_details: order,
     });
   } catch (error) {
-    // req.flash("error", "Somthing went wrong");
     return res.status(500).json({
       success: false,
       message: "Internal Server Error.",

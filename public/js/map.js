@@ -63,12 +63,11 @@ olms.apply(map, styleJson).then(() => {
 
     map.addOverlay(popupOverlay);
 
-    //  Track popup toggle state
     let popupVisible = false;
 
     //  Hover: show popup temporarily
     map.on("pointermove", (e) => {
-      if (popupVisible) return; // Don't show on hover if already toggled on
+      if (popupVisible) return;
 
       const feature = map.forEachFeatureAtPixel(e.pixel, (feat) => feat);
 
@@ -81,7 +80,6 @@ olms.apply(map, styleJson).then(() => {
       }
     });
 
-    //  Click: toggle popup on marker, hide elsewhere
     map.on("singleclick", (e) => {
       const feature = map.forEachFeatureAtPixel(e.pixel, (feat) => feat);
 
